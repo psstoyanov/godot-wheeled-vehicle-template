@@ -1,14 +1,14 @@
 extends RigidBody2D
 
-export var grip = 1.0
-export var steering_speed = 0.5
-export var steering_speed_decay = 0.1
+@export var grip = 1.0
+@export var steering_speed = 0.5
+@export var steering_speed_decay = 0.1
 # true: steering wheels return to their forward position
 # false: steering wheels remain at their current angle
-export var center_steering = true
-export var air_resistance = 0.1
-onready var right = global_transform.x.normalized()
-onready var wheel_group = str(get_instance_id()) + "-wheels"  # unique name for the wheel group
+@export var center_steering = true
+@export var air_resistance = 0.1
+@onready var right = global_transform.x.normalized()
+@onready var wheel_group = str(get_instance_id()) + "-wheels"  # unique name for the wheel group
 
 
 func _ready():
@@ -24,11 +24,11 @@ func _ready():
 	get_tree().set_group(wheel_group, "center_steering", center_steering)
 
 
-func _process(delta):
+func _process(delta) -> void:
 	right = global_transform.x.normalized()
 
 
-func _physics_process(delta):
+func _physics_process(delta) -> void:
 	# acceleration input
 	var drive_input = 0
 	if Input.is_action_pressed("accelerate"):
@@ -55,5 +55,3 @@ func _physics_process(delta):
 	# air resistance *should* scale quadratically with velssssocity but whatever
 #	var velSquared = vel.length_squared() * vel.normalized()
 #	apply_central_impulse(-air_resistance * velSquared)
-
-
