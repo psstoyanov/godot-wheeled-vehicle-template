@@ -16,6 +16,9 @@ extends RigidBody2D
 ## `false`: steering wheels remain at their current angle.
 @export var center_steering: bool = true
 
+## Debug lines for the wheel forces
+@export var debug_draw_forces: bool = false
+
 @onready var right: Vector2
 @onready var wheel_group: String = str(get_instance_id()) + "-wheels" # unique name for the wheel group
 
@@ -29,6 +32,7 @@ func _ready():
 	# tire setup
 	get_tree().set_group(wheel_group, "vehicle", self)
 	get_tree().set_group(wheel_group, "grip", grip)
+	get_tree().set_group(wheel_group, "debug_draw_forces", debug_draw_forces)
 	get_tree().set_group(wheel_group, "steering_speed", steering_speed)
 	get_tree().set_group(wheel_group, "center_steering", center_steering)
 

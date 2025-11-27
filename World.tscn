@@ -124,4 +124,3 @@ rotation = 5.75958
 
 [node name="Camera2D" type="Camera2D" parent="Truck"]
 rotation = 0.52360517
-zoom = Vector2(2, 2)
