@@ -1,13 +1,22 @@
 extends RigidBody2D
 
-@export var grip = 1.0
-@export var steering_speed = 3
-@export var steering_speed_decay = 0.1
-# true: steering wheels return to their forward position
-# false: steering wheels remain at their current angle
-@export var center_steering = true
+@export_group("Vehicle controls")
+## Set the grip of the vehicle.
+@export_range(0.0, 1.0) var grip = 1.0
+## Air resistance
 @export var air_resistance = 0.1
-@onready var right : Vector2
+
+## How fast the wheel steers toward its target angle (degrees per second).
+@export var steering_speed: int = 3
+## How fast the wheel returns towards center postion(degrees per second).
+@export var steering_speed_decay: float = 0.1
+## Set if the steering should return to the center position.
+##
+## `true`: steering wheels return to their forward position.
+## `false`: steering wheels remain at their current angle.
+@export var center_steering: bool = true
+
+@onready var right: Vector2
 @onready var wheel_group: String = str(get_instance_id()) + "-wheels" # unique name for the wheel group
 
 
@@ -45,11 +54,11 @@ func _physics_process(delta) -> void:
 	get_tree().call_group(wheel_group, "steer", steering_input, delta)
 	
 	# lateral tire forces
-	get_tree().call_group(wheel_group, "apply_lateral_forces",delta)
+	get_tree().call_group(wheel_group, "apply_lateral_forces", delta)
 	
 	# "air resistance"
 	var vel = 0.005 * linear_velocity
 	apply_central_impulse(-air_resistance * vel)
 	# air resistance *should* scale quadratically with velssssocity but whatever
-#	var velSquared = vel.length_squared() * vel.normalized()
-#	apply_central_impulse(-air_resistance * velSquared)
+	# var velSquared = vel.length_squared() * vel.normalized()
+	# apply_central_impulse(-air_resistance * velSquared)
