@@ -8,13 +8,10 @@ extends RigidBody2D
 
 ## How fast the wheel steers toward its target angle (degrees per second).
 @export var steering_speed: int = 3
+## Enable steering auto-centering to return towards center position.
+@export var steering_auto_center: bool = true
 ## How fast the wheel returns towards center postion(degrees per second).
 @export var steering_speed_decay: float = 0.1
-## Set if the steering should return to the center position.
-##
-## `true`: steering wheels return to their forward position.
-## `false`: steering wheels remain at their current angle.
-@export var center_steering: bool = true
 
 ## Debug lines for the wheel forces
 @export var debug_draw_forces: bool = false
@@ -34,7 +31,7 @@ func _ready():
 	get_tree().set_group(wheel_group, "grip", grip)
 	get_tree().set_group(wheel_group, "debug_draw_forces", debug_draw_forces)
 	get_tree().set_group(wheel_group, "steering_speed", steering_speed)
-	get_tree().set_group(wheel_group, "center_steering", center_steering)
+	get_tree().set_group(wheel_group, "steering_auto_center", steering_auto_center)
 
 func _physics_process(delta) -> void:
 	right = global_transform.x.normalized()

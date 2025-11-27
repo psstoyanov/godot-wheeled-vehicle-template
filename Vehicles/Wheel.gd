@@ -3,15 +3,18 @@ extends Sprite2D
 
 @export_group("Wheel controls")
 ## Whether the wheel responds to steer input
-@export var is_steering = false 
+@export var is_steering = false
 ## Maximum angle the wheel can steer to
-@export var max_angle = 0.0 
+@export var max_angle = 0.0
 ## How much a wheel responds to drive input
-@export var power = 0.0 
+@export var power = 0.0
 
-var steering_speed = 0.0 # how fast the wheel steers, set by Vehicle.gd
-var grip = 0.0 # grip of the tire, set by Vehicle.gd
-var center_steering = true # see explanation in Vehicle.gd
+## How fast the wheel steers, set by Vehicle.gd
+var steering_speed = 0.0
+## Grip of the tire, set by Vehicle.gd
+var grip = 0.0
+## See explanation in Vehicle.gd
+var steering_auto_center = true
 
 @onready var forward: Vector2
 @onready var right: Vector2
@@ -53,7 +56,7 @@ func steer(steering_input, delta):
 	if (is_steering):
 		var desired_angle = clamp(steering_input * max_angle,
 			- max_angle, max_angle)
-		if steering_input == 0 and not center_steering:
+		if steering_input == 0 and not steering_auto_center:
 			desired_angle = rotation_degrees
 		var new_angle = lerp(rotation_degrees, desired_angle,
 			steering_speed * delta)
