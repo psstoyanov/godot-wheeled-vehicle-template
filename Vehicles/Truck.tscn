@@ -14,8 +14,7 @@ height = 61.5141
 [node name="Truck" type="RigidBody2D"]
 physics_material_override = SubResource("1")
 script = ExtResource("1")
-grip = 4.0
-steering_speed = 0.2
+grip = 0.7
 steering_speed_decay = 0.2
 
 [node name="Wheels" type="Node2D" parent="."]
@@ -43,8 +42,6 @@ position = Vector2(-56, 51)
 scale = Vector2(1.7, 1.5)
 texture = ExtResource("2")
 script = ExtResource("3")
-is_steering = true
-max_angle = -25.0
 power = 3.0
 
 [node name="RR" type="Sprite2D" parent="Wheels"]
@@ -52,8 +49,6 @@ position = Vector2(56, 51)
 scale = Vector2(1.7, 1.5)
 texture = ExtResource("2")
 script = ExtResource("3")
-is_steering = true
-max_angle = -25.0
 power = 3.0
 
 [node name="Body" type="Sprite2D" parent="."]
