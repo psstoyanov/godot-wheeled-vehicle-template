@@ -3,6 +3,8 @@ extends RigidBody2D
 @export_group("Vehicle controls")
 ## Set the grip of the vehicle.
 @export_range(0.0, 1.0) var grip = 1.0
+## Multiplier on lateral grip when braking
+@export var handbrake_strength := 2.0
 ## Air resistance
 @export var air_resistance = 0.1
 
@@ -19,7 +21,6 @@ extends RigidBody2D
 @onready var right: Vector2
 @onready var wheel_group: String = str(get_instance_id()) + "-wheels" # unique name for the wheel group
 
-
 func _ready():
 	# add wheels to group with unique name
 	var wheels = get_node("Wheels").get_children()
@@ -32,6 +33,7 @@ func _ready():
 	get_tree().set_group(wheel_group, "debug_draw_forces", debug_draw_forces)
 	get_tree().set_group(wheel_group, "steering_speed", steering_speed)
 	get_tree().set_group(wheel_group, "steering_auto_center", steering_auto_center)
+	get_tree().set_group(wheel_group, "handbrake_strength", handbrake_strength)
 
 func _physics_process(delta) -> void:
 	right = global_transform.x.normalized()
@@ -42,6 +44,10 @@ func _physics_process(delta) -> void:
 		drive_input = 1
 	if Input.is_action_pressed("decelerate"):
 		drive_input = -1
+	if Input.is_action_pressed("handbrake"):
+		get_tree().call_group(wheel_group, "set_handbrake_active", true)
+	else:
+		get_tree().call_group(wheel_group, "set_handbrake_active", false)
 	get_tree().call_group(wheel_group, "drive", drive_input)
 	
 	# steering input

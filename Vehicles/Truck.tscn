@@ -27,7 +27,6 @@ texture = ExtResource("2")
 script = ExtResource("3")
 is_steering = true
 max_angle = 25.0
-power = 3.0
 
 [node name="FR" type="Sprite2D" parent="Wheels"]
 position = Vector2(56, -51)
@@ -36,7 +35,6 @@ texture = ExtResource("2")
 script = ExtResource("3")
 is_steering = true
 max_angle = 25.0
-power = 3.0
 
 [node name="RL" type="Sprite2D" parent="Wheels"]
 position = Vector2(-56, 51)
@@ -44,6 +42,7 @@ scale = Vector2(1.7, 1.5)
 texture = ExtResource("2")
 script = ExtResource("3")
 power = 3.0
+is_handbrake = true
 
 [node name="RR" type="Sprite2D" parent="Wheels"]
 position = Vector2(56, 51)
@@ -51,6 +50,7 @@ scale = Vector2(1.7, 1.5)
 texture = ExtResource("2")
 script = ExtResource("3")
 power = 3.0
+is_handbrake = true
 
 [node name="Body" type="Sprite2D" parent="."]
 z_index = 1
