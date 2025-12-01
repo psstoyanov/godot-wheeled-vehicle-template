@@ -3,9 +3,9 @@ extends Sprite2D
 
 @export_group("Wheelcontrols")
 ##Whetherthewheelrespondstosteerinput
-@export var is_steering:bool = false
+@export var is_steering: bool = false
 ##Maximumanglethewheelcansteerto
-@export var max_angle:float = 0.0
+@export var max_angle: float = 0.0
 ##Howmuch a wheel responds to drive input
 @export var power: float = 0.0
 ## Whether the wheel responds to handbrake input
@@ -99,13 +99,11 @@ func drive(drive_input):
 func apply_lateral_forces(delta):
 	# Standard lateral friction for all wheels
 	var lateral_speed: float = wheel_velocity.dot(right)
-	var lateral_impulse = -right * lateral_speed * grip * delta
+	var lateral_impulse = - right * lateral_speed * grip * delta
 
 	if lateral_impulse.length() > 10.0:
 		lateral_impulse = lateral_impulse.normalized() * 10.0
 	
-	# Apply lateral force to the wheels
-	vehicle.apply_impulse(lateral_impulse, player_to_wheel)
 	
 	# Expose handbrake force vectors
 	var lateral_brake_impulse := Vector2.ZERO
@@ -115,11 +113,11 @@ func apply_lateral_forces(delta):
 	if handbrake_active and is_handbrake:
 		# Chassis axes in global space
 		var chassis_right = vehicle.global_transform.x.normalized()
-		var chassis_forward = -vehicle.global_transform.y.normalized()
+		var chassis_forward = - vehicle.global_transform.y.normalized()
 
 		# Project wheel velocity onto chassis
-		var lateral_speed_hb : float = wheel_velocity.dot(chassis_right)
-		var forward_speed_hb : float = wheel_velocity.dot(chassis_forward)
+		var lateral_speed_hb: float = wheel_velocity.dot(chassis_right)
+		var forward_speed_hb: float = wheel_velocity.dot(chassis_forward)
 
 		# Lateral handbrake force - use the lateral speed to calculate it
 		var lateral_brake_strength = min(abs(lateral_speed_hb) * 0.3, 150.0)
@@ -128,8 +126,9 @@ func apply_lateral_forces(delta):
 			# The key is reversing the sign of the lateral speed.
 			# Using directly the `lateral_speed_hb` instead can cause issues
 			# with icredibly high forces applied when steering right. 
-			lateral_brake_impulse = -signf(lateral_speed_hb) * chassis_right \
-				* lateral_brake_strength * handbrake_strength * delta
+			lateral_brake_impulse = - signf(lateral_speed_hb) * chassis_right \
+				* lateral_brake_strength * handbrake_strength * delta \
+				* (grip * 1.2)
 		 
 		# Clamp to ensure there won't be massive spikes.
 		var max_lateral_impulse = 5.0
@@ -137,12 +136,12 @@ func apply_lateral_forces(delta):
 			lateral_brake_impulse = lateral_brake_impulse.normalized() \
 				* max_lateral_impulse
 		
-		# Apply hanbrake lateral force
-		vehicle.apply_impulse(lateral_brake_impulse, player_to_wheel)
+		# Add smoothing to the handbrake lateral impulse
+		lateral_impulse = lerp(lateral_brake_impulse, lateral_impulse, 0.75)
 
 
 		# Forward handbrake force
-		forward_brake = -chassis_forward * forward_speed_hb * 0.2 * delta
+		forward_brake = - chassis_forward * forward_speed_hb * 0.2 * delta
 
 		# Clamp forward force
 		var max_forward_brake = abs(forward_speed_hb) * 1.5
@@ -150,7 +149,9 @@ func apply_lateral_forces(delta):
 			forward_brake = forward_brake.normalized() * max_forward_brake
 
 		vehicle.apply_impulse(forward_brake, player_to_wheel)
-		
+
+	# Apply lateral force to the wheels
+	vehicle.apply_impulse(lateral_impulse, player_to_wheel)
 		
 	# Debug draw the applied forces
 	if debug_draw_forces:
